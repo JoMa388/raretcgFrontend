@@ -1,0 +1,11 @@
+# TO-DO
+- [ ] Single page view for each cards
+- [ ] Multi Page view for cards
+- [ ] Add Card to DB
+- [ ] Delete Card to DB
+- [ ] Edit Card to DB
+- [ ] Login & Logout(local storage)
+- [ ] Profile, Home/landing, Routing
+- [ ] Cart functionality
+    - [ ] Display, Add, delete
+- [ ] Card Schema
