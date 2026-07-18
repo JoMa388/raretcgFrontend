@@ -1,12 +1,12 @@
 // import LoginForm from './LoginForm';
-import LoginForm from "@/app/components/loginForm";
+import LoginForm from "@/app/login/loginForm";
 
 export default function LoginPage() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen p-6">
-      <h1 className="text-3xl font-bold mb-6">Login</h1>
-      <LoginForm /> {/* ← Client component */}
-    </main>
+    <div className="flex flex-col items-center justify-center min-h-[60vh]">
+      <h1 className="text-4xl font-bold mb-8 text-gray-900">Login</h1>
+      <LoginForm />
+    </div>
   );
 }
 
