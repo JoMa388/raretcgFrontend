@@ -16,8 +16,8 @@ export default function DeleteCardView() {
 
         try {
             const response = await axios.delete(`http://localhost:8000/api/cards/${cardID}`);
-            console.log('Form submitted successfully');
-            console.log("Response:", response.data);
+            console.log('Card deleted successfully');
+            console.log("Response:", response.data.message);
         } catch(error) {
             console.error("Error submitting form:", error);
         } 

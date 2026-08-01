@@ -1,0 +1,3 @@
+Problems I ran into while developing this application and how I solved them
+* learned how to utilize pagination to turn a long list of items into multiple smaller, easy to browse, pages of items.
+* converted a mongodb database into a mysql one. First I explorted my mongodb db as a csv file then I imported it into a mysql db using a "LOAD DATA" sql query.

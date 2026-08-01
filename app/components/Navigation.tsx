@@ -43,15 +43,20 @@ export default function Navigation() {
   }
 
   return (
-    <nav className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg relative">
+    <nav className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex flex-wrap justify-between items-center h-16 gap-4">
           <div className="flex items-center">
             <Link href="/" className="text-2xl font-bold hover:text-blue-200 transition-colors">
               RareTCG
             </Link>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            {isAuthed && decoded ? (
+              <span className="px-3 py-2 rounded-md text-sm font-medium text-white">
+                Hi, {decoded.email}
+              </span>
+            ) : null}
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -66,32 +71,29 @@ export default function Navigation() {
               </Link>
             ))}
             {isAuthed && decoded ? (
-              <>
-                <span className="px-3 py-2 rounded-md text-sm font-medium text-white">
-                  Hi, {decoded.email}
-                </span>
-                <button 
-                  onClick={handleLogout}
-                  className="px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-blue-500 hover:text-white text-white cursor-pointer"
-                >
-                  Logout
-                </button>
-              </>
+              <button 
+                onClick={handleLogout}
+                className="px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-blue-500 hover:text-white text-white cursor-pointer"
+              >
+                Logout
+              </button>
+            ) : null}
+            {isAuthed && decoded ? (
+              <Link
+                href="/cart"
+                className={`p-3 rounded-md transition-colors ${
+                  pathname === '/cart'
+                    ? 'bg-white text-blue-600'
+                    : 'hover:bg-blue-500 hover:text-white'
+                }`}
+                aria-label="Shopping cart"
+              >
+                <FaShoppingCart className="w-6 h-6" />
+              </Link>
             ) : null}
           </div>
         </div>
       </div>
-      <Link
-        href="/cart"
-        className={`absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-md transition-colors ${
-          pathname === '/cart'
-            ? 'bg-white text-blue-600'
-            : 'hover:bg-blue-500 hover:text-white'
-        }`}
-        aria-label="Shopping cart"
-      >
-        <FaShoppingCart className="w-6 h-6" />
-      </Link>
     </nav>
   );
 }

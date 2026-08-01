@@ -8,12 +8,10 @@ type Card = {
   name: string;
   supertype: string;
   rarity: string;
-  images: {
-    small: string;
-    large: string;
-  };
+  images_small: string;
+  images_large: string;
   price: number;
-  set_name?: string;
+  set_name: string;
 };
 
 export default async function CardView(props: {params: Promise<{ id: string }> }) {
@@ -74,7 +72,7 @@ export default async function CardView(props: {params: Promise<{ id: string }> }
                                 <div className="relative w-full max-w-md">
                                     <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl blur-xl opacity-20"></div>
                                     <img 
-                                        src={card.images.large} 
+                                        src={card.images_large} 
                                         alt={card.name}
                                         className="w-full h-auto rounded-lg object-contain"
                                     />
@@ -112,7 +110,7 @@ export default async function CardView(props: {params: Promise<{ id: string }> }
                                     <div className="flex items-center justify-between p-5 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200 hover:shadow-md transition-shadow">
                                         <span className="text-lg font-semibold text-gray-700">Price:</span>
                                         <span className="text-2xl font-bold text-blue-600 bg-white px-4 py-2 rounded-lg shadow-sm">
-                                            ${card.price?.toFixed(2) || '0.00'}
+                                            ${card.price || '0.00'}
                                         </span>
                                     </div>
                                 </div>

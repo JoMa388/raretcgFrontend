@@ -12,10 +12,8 @@ type Card = {
     supertype: string;
     set_name: string;
     rarity: string;
-    images: {
-        small: string;
-        large: string;
-    };
+    images_small: string;
+    images_large: string;
     price: number
 };
 
@@ -36,14 +34,14 @@ export default function EditCardView() {
                 console.log("Fetch successful")
                 setFormData((prevData) => ({
                     ...prevData,
-                    _id: card._id,
+                    _id: card.id,
                     name: card.name,
-                    id:card.id,
+                    id:card.card_id,
                     type: card.supertype,
                     rarity: card.rarity,
                     setName: card.set_name,
-                    imgSmall: card.images.small,
-                    imgLarge: card.images.large,
+                    imgSmall: card.images_small,
+                    imgLarge: card.images_large,
                     price: card.price,
                 }));
             } catch (err) {
