@@ -3,18 +3,27 @@ import { useEffect, useState } from "react"
 import { jwtDecode } from "jwt-decode"
 import axios from "axios"
 
-type Card = {
-    id: string;
-    name: string;
-    price: number;
-    images: {
-        small: string;
-        large: string;
-    };
-}
+// type Card = {
+//     id: string;
+//     name: string;
+//     price: number;
+//     images: {
+//         small: string;
+//         large: string;
+//     };
+// }
+
+// type CartItem = {
+//     card: Card;
+//     quantity: number;
+// }
 
 type CartItem = {
-    card: Card;
+    id: number;
+    name: string;
+    card_id: string;
+    price: number;
+    images_small: string;
     quantity: number;
 }
 
@@ -52,7 +61,7 @@ export default function CartView () {
         fetchCart()
     }, [trigger])
 
-    const handleDelete = async (cardId: string) => {
+    const handleDelete = async (cardId: number) => {
         if (!userInfo) return;
         const response = await axios.delete(`http://localhost:8000/api/cart/${userInfo.userId}/${cardId}`)
         console.log("Response:", response.data.message)
@@ -62,7 +71,7 @@ export default function CartView () {
 
     // Calculate total price
     const totalPrice = cart.reduce((sum, cartItem) => {
-        return sum + (cartItem.card.price * cartItem.quantity)
+        return sum + (cartItem.price * cartItem.quantity)
     }, 0)
 
     return (
@@ -101,7 +110,7 @@ export default function CartView () {
                         <div className="lg:col-span-2 space-y-4">
                             {cart.map((cartItem) => (
                                 <div 
-                                    key={cartItem.card.id}
+                                    key={cartItem.card_id}
                                     className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300"
                                 >
                                     <div className="p-6">
@@ -110,8 +119,8 @@ export default function CartView () {
                                             <div className="flex-shrink-0">
                                                 <div className="relative w-full sm:w-48 h-64 sm:h-64 rounded-lg overflow-hidden">
                                                     <img 
-                                                        src={cartItem.card.images.small} 
-                                                        alt={cartItem.card.name}
+                                                        src={cartItem.images_small} 
+                                                        alt={cartItem.name}
                                                         className="w-full h-full object-contain p-2"
                                                     />
                                                 </div>
@@ -121,17 +130,17 @@ export default function CartView () {
                                             <div className="flex-1 flex flex-col justify-between">
                                                 <div>
                                                     <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                                                        {cartItem.card.name}
+                                                        {cartItem.name}
                                                     </h3>
                                                     <p className="text-sm text-gray-500 mb-4 font-mono">
-                                                        ID: {cartItem.card.id}
+                                                        ID: {cartItem.card_id}
                                                     </p>
                                                     
                                                     <div className="flex flex-wrap gap-4 mb-4">
                                                         <div className="bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
                                                             <span className="text-sm text-gray-600 font-medium">Price:</span>
                                                             <span className="text-lg font-bold text-blue-600 ml-2">
-                                                                ${cartItem.card.price?.toFixed(2) || '0.00'}
+                                                                ${cartItem.price || '0.00'}
                                                             </span>
                                                         </div>
                                                         <div className="bg-purple-50 px-4 py-2 rounded-lg border border-purple-200">
@@ -146,7 +155,7 @@ export default function CartView () {
 
                                                 {/* Delete Button */}
                                                 <button 
-                                                    onClick={() => handleDelete(cartItem.card.id)}
+                                                    onClick={() => handleDelete(cartItem.id)}
                                                     className="self-start mt-4 px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
                                                 >
                                                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

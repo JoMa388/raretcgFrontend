@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 export default function LoginForm() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -24,6 +25,8 @@ export default function LoginForm() {
       );
       console.log("user added successfully")
       console.log(response.data)
+      toast.success("Account created successfully!");
+      router.push('/login')
 
     } catch (err) {
       console.log("an error occurred")

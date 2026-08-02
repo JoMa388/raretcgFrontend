@@ -16,10 +16,18 @@ export default function Navigation() {
   useEffect(() => {
     const token = localStorage.getItem("token")
     setIsAuthed(!!token)
-    console.log(token)
-    if (token){
+    console.log("Stored token:", token)
+
+    if (!token) {
+      setDecoded(null);
+      return;
+    }
+
+    try {
       setDecoded(jwtDecode<{ email?: string }>(token))
-    } else {
+    } catch (error) {
+      console.error("Invalid JWT:", error);
+      localStorage.removeItem("token");
       setDecoded(null)
     }
     
