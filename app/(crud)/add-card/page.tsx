@@ -32,7 +32,7 @@ export default function AddCardView() {
 
         try {
             const response = await axios.post(
-                "http://localhost:8000/api/cards",
+                `${process.env.NEXT_PUBLIC_API_UR}/api/cards`,
                 formData
             );
             toast('Card Added Successfully!')

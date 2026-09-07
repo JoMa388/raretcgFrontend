@@ -40,7 +40,7 @@ export default function AllCardView() {
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/cards')
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_UR}/api/cards`)
             setCards(await response.data.message)
             console.log(cards)
             console.log("Fetch successful")

@@ -12,7 +12,7 @@ export default function DeleteButton( {cardID} ) {
 
     const handleClick = async () => {
         try {
-            const response = await axios.delete(`http://localhost:8000/api/cards/${cardID}`);
+            const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_UR}/api/cards/${cardID}`);
             toast('Card Deleted!')
             console.log('Form submitted successfully');
             console.log("Response:", response.data);

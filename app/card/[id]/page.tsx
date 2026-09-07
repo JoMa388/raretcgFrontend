@@ -21,7 +21,7 @@ export default async function CardView(props: {params: Promise<{ id: string }> }
     let card: Card | null = null;
 
     try {
-        const response = await axios.get(`http://localhost:8000/api/cards/${params.id}`)
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_UR}/api/cards/${params.id}`)
         card = response.data.message
         console.log("Fetch successful")
     } catch (err) {

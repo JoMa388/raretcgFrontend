@@ -49,7 +49,7 @@ export default function CartView () {
         // setUserInfo(decodedUser)
         const fetchCart = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/cart/${user?.userId}`)
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/${user?.userId}`)
                 const cartData = response.data.message
                 console.log("Response:", cartData)
                 setCart(cartData)
@@ -64,7 +64,7 @@ export default function CartView () {
 
     const handleDelete = async (cardId: number) => {
         if (!user.userId) return;
-        const response = await axios.delete(`http://localhost:8000/api/cart/${user.userId}/${cardId}`)
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/cart/${user.userId}/${cardId}`)
         console.log("Response:", response.data.message)
         console.log(`${cardId} removed from cart`)
         setTrigger(prev => !prev);
@@ -76,7 +76,7 @@ export default function CartView () {
         setError("");
 
         const response = await axios.post(
-            "http://localhost:8000/api/checkout/create-checkout-session",
+            `${process.env.NEXT_PUBLIC_API_URL}/api/checkout/create-checkout-session`,
             { cart, userId: user.userId },
             // {
             // headers: {

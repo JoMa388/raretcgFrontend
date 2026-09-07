@@ -20,7 +20,7 @@ export default function LoginForm() {
     setLoading(true);
     setMessage('');
     try {
-      const response = await axios.post(`http://localhost:8000/api/users/signup`,
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/users/signup`,
         form
       );
       console.log("user added successfully")

@@ -41,7 +41,7 @@ export default function LoginForm() {
     setMessage('');
 
     try {
-      const res = await axios.post(`http://localhost:8000/api/users/login`,
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login`,
         form
       );
       const data = await res;
