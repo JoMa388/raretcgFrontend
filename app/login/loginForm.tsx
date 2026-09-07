@@ -2,15 +2,18 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+// import { jwtDecode } from 'jwt-decode';
+import { useAuth } from '@/app/context/AuthContext'
 
 export default function LoginForm() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [user, setUser] = useState('');
+
+  // const [user, setUser] = useState('');
 
   const router = useRouter();
+  const { user, login } = useAuth();
 
   // useEffect(() => {
   //   const fetchMe = async () => {
@@ -43,13 +46,15 @@ export default function LoginForm() {
       );
       const data = await res;
 
-      localStorage.setItem("token", data.data.token)
-      const decoded = jwtDecode(data.data.token)
-      console.log(decoded)
+      login(data.data.token);
+      // localStorage.setItem("token", data.data.token)
+      // const decoded = jwtDecode(data.data.token)
+      console.log(user)
 
+      // the following console log has an error where it will sometimes log the previous users information
       console.log('Login Successful')
-      console.log(`Email: ${decoded.email}`)
-      console.log(`User ID: ${decoded.userId}`)
+      console.log(`Email: ${user?.email}`)
+      console.log(`User ID: ${user?.userId}`)
       router.push('/all-cards')
 
       if (!res.ok) throw new Error(data.error || 'Login failed');

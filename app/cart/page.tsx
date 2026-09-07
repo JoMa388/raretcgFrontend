@@ -1,7 +1,8 @@
 "use client"
 import { useEffect, useState } from "react"
-import { jwtDecode } from "jwt-decode"
+// import { jwtDecode } from "jwt-decode"
 import axios from "axios"
+import { useAuth } from '@/app/context/AuthContext'
 
 // type Card = {
 //     id: string;
@@ -13,10 +14,6 @@ import axios from "axios"
 //     };
 // }
 
-// type CartItem = {
-//     card: Card;
-//     quantity: number;
-// }
 
 type CartItem = {
     id: number;
@@ -27,28 +24,32 @@ type CartItem = {
     quantity: number;
 }
 
-type UserInfo = {
-    userId: string;
-    email?: string;
-}
+// type UserInfo = {
+//     userId: string;
+//     email?: string;
+// }
 
 export default function CartView () {
 
+    const { user } = useAuth();
+
     const [cart, setCart] = useState<CartItem[]>([])
-    const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
+    // const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
 
     // this state is used to call the useEffect function
     const [trigger, setTrigger] = useState(false);
+    
+    const [error, setError] = useState("");
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
-        if (!token) return;
+        // const token = localStorage.getItem("token")
+        // if (!token) return;
         
-        const decodedUser = jwtDecode<UserInfo>(token)
-        setUserInfo(decodedUser)
+        // const decodedUser = jwtDecode<UserInfo>(token)
+        // setUserInfo(decodedUser)
         const fetchCart = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/cart/${decodedUser.userId}`)
+                const response = await axios.get(`http://localhost:8000/api/cart/${user?.userId}`)
                 const cartData = response.data.message
                 console.log("Response:", cartData)
                 setCart(cartData)
@@ -62,12 +63,35 @@ export default function CartView () {
     }, [trigger])
 
     const handleDelete = async (cardId: number) => {
-        if (!userInfo) return;
-        const response = await axios.delete(`http://localhost:8000/api/cart/${userInfo.userId}/${cardId}`)
+        if (!user.userId) return;
+        const response = await axios.delete(`http://localhost:8000/api/cart/${user.userId}/${cardId}`)
         console.log("Response:", response.data.message)
         console.log(`${cardId} removed from cart`)
         setTrigger(prev => !prev);
     }
+
+    const handleCheckout = async () => {
+        try {
+        // setLoading(true);
+        setError("");
+
+        const response = await axios.post(
+            "http://localhost:8000/api/checkout/create-checkout-session",
+            { cart, userId: user.userId },
+            // {
+            // headers: {
+            //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+            // },
+            // }
+        );
+
+        window.location.href = response.data.checkoutUrl;
+        } catch (error) {
+        console.error(error);
+        setError("Checkout could not be started.");
+        // setLoading(false);
+        }
+    };
 
     // Calculate total price
     const totalPrice = cart.reduce((sum, cartItem) => {
@@ -196,7 +220,7 @@ export default function CartView () {
                                     </div>
                                 </div>
 
-                                <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl text-lg">
+                                <button onClick={handleCheckout} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-4 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl text-lg">
                                     Proceed to Checkout
                                 </button>
 

@@ -1,32 +1,36 @@
 "use client"
 import { useState, useEffect } from "react"
-import { jwtDecode } from "jwt-decode"
+// import { jwtDecode } from "jwt-decode"
 import { toast } from "react-toastify"
 import axios from "axios"
+import { useAuth } from "@/app/context/AuthContext"
+import Link from "next/link"
 
 interface AddToCartProps {
     cardID: string
 }
 
-interface DecodedToken {
-    userId: string
-    [key: string]: any
-}
+// interface DecodedToken {
+//     userId: string
+//     [key: string]: any
+// }
 
 export default function AddToCart({ cardID }: AddToCartProps) {
 
-    const [quantity, setQuantity] = useState(1)
-    const [decoded, setDecoded] = useState<DecodedToken | null>(null)
+    const { user, isLoggedIn } = useAuth();
 
-    useEffect(() => {
-        const token = localStorage.getItem("token")
-        if (token){
-            setDecoded(jwtDecode<DecodedToken>(token))
-        } else {
-            setDecoded(null)
-        }
+    const [quantity, setQuantity] = useState(1)
+    // const [decoded, setDecoded] = useState<DecodedToken | null>(null)
+
+    // useEffect(() => {
+    //     const token = localStorage.getItem("token")
+    //     if (token){
+    //         setDecoded(jwtDecode<DecodedToken>(token))
+    //     } else {
+    //         setDecoded(null)
+    //     }
     
-    }, []);
+    // }, []);
 
     // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //     const value = Number(e.target.value)
@@ -38,14 +42,14 @@ export default function AddToCart({ cardID }: AddToCartProps) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if (!decoded || !decoded.userId) {
+        if (!isLoggedIn) {
             console.error("User not authenticated")
             return
         }
 
         try {
             const response = await axios.post('http://localhost:8000/api/users/add-to-cart', {
-                userId: decoded.userId,
+                userId: user.userId,
                 cardId: cardID,
                 quantity: quantity
             })
@@ -109,25 +113,50 @@ export default function AddToCart({ cardID }: AddToCartProps) {
                 </div>
 
                 {/* Add to Cart Button */}
-                <button 
+                {isLoggedIn ? (
+                    <button 
                     type="submit"
                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-purple-700 active:scale-[0.98] transition-all duration-200 text-lg flex items-center justify-center gap-2"
-                >
-                    <svg 
-                        className="w-5 h-5" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
                     >
-                        <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" 
-                        />
-                    </svg>
-                    Add to Cart
-                </button>
+                        <svg 
+                            className="w-5 h-5" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                        >
+                            <path 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round" 
+                                strokeWidth={2} 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" 
+                            />
+                        </svg>
+                        Add to Cart
+                    </button>
+                ):
+                    <Link href="/login" className="block">
+                        <button
+                            type="button"
+                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-purple-700 active:scale-[0.98] transition-all duration-200 text-lg flex items-center justify-center gap-2"
+                        >
+                            <svg 
+                                className="w-5 h-5" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                            >
+                                <path 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    strokeWidth={2} 
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" 
+                                />
+                            </svg>
+                            <span>Log In To Add Items To Your Cart</span>
+                        </button>
+                    </Link>
+                }
+                
             </form>
         </div>
     )

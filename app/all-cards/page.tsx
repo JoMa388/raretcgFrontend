@@ -93,7 +93,7 @@ export default function AllCardView() {
                   <h3 className="text-lg font-semibold text-slate-900 truncate">
                     {card.name}
                   </h3>
-                  <p className="mt-3 text-xl font-bold text-slate-900">
+                  <p className="mt-3 text-xl font-bold text-blue-600">
                     ${card.price}
                   </p>
                 </div>

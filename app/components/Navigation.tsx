@@ -5,50 +5,52 @@ import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
 import { FaShoppingCart } from 'react-icons/fa';
+import { useAuth } from '@/app/context/AuthContext'
 
 export default function Navigation() {
   const pathname = usePathname();
   const router = useRouter()
+  const { user, isLoggedIn, logout } = useAuth();
 
-  const [decoded, setDecoded] = useState<{ email?: string } | null>(null)
-  const [isAuthed, setIsAuthed] = useState(false)
+  // const [decoded, setDecoded] = useState<{ email?: string } | null>(null)
+  // const [isAuthed, setIsAuthed] = useState(false)
 
-  useEffect(() => {
-    const token = localStorage.getItem("token")
-    setIsAuthed(!!token)
-    console.log("Stored token:", token)
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token")
+  //   setIsAuthed(!!token)
+  //   console.log("Stored token:", token)
 
-    if (!token) {
-      setDecoded(null);
-      return;
-    }
+  //   if (!token) {
+  //     setDecoded(null);
+  //     return;
+  //   }
 
-    try {
-      setDecoded(jwtDecode<{ email?: string }>(token))
-    } catch (error) {
-      console.error("Invalid JWT:", error);
-      localStorage.removeItem("token");
-      setDecoded(null)
-    }
+  //   try {
+  //     setDecoded(jwtDecode<{ email?: string }>(token))
+  //   } catch (error) {
+  //     console.error("Invalid JWT:", error);
+  //     localStorage.removeItem("token");
+  //     setDecoded(null)
+  //   }
     
-  }, [pathname]);
+  // }, [pathname]);
 
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/all-cards', label: 'All Cards' },
     
     // auth dependent links
-    isAuthed && { href: '/add-card', label: 'Add Card' },
-    !isAuthed && { href: '/login', label: 'Login' },
-    !isAuthed && { href: '/signup', label: 'Sign up' },
-    isAuthed && { href: '/my-profile', label: 'Account' },
+    isLoggedIn && { href: '/add-card', label: 'Add Card' },
+    !isLoggedIn && { href: '/login', label: 'Login' },
+    !isLoggedIn && { href: '/signup', label: 'Sign up' },
+    isLoggedIn && { href: '/my-profile', label: 'Account' },
   ].filter(Boolean) as { href: string; label: string }[];
   
-  const handleLogout = () => {
-    localStorage.removeItem("token")
-    setIsAuthed(false)
-    router.push("/")
-  }
+  // const handleLogout = () => {
+  //   localStorage.removeItem("token")
+  //   setIsAuthed(false)
+  //   router.push("/")
+  // }
 
   return (
     <nav className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
@@ -60,9 +62,9 @@ export default function Navigation() {
             </Link>
           </div>
           <div className="flex flex-wrap items-center justify-end gap-2">
-            {isAuthed && decoded ? (
+            {isLoggedIn && user ? (
               <span className="px-3 py-2 rounded-md text-sm font-medium text-white">
-                Hi, {decoded.email}
+                Hi, {user.email}
               </span>
             ) : null}
             {navLinks.map((link) => (
@@ -78,15 +80,15 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
-            {isAuthed && decoded ? (
+            {isLoggedIn && user ? (
               <button 
-                onClick={handleLogout}
+                onClick={logout}
                 className="px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-blue-500 hover:text-white text-white cursor-pointer"
               >
                 Logout
               </button>
             ) : null}
-            {isAuthed && decoded ? (
+            {isLoggedIn && user ? (
               <Link
                 href="/cart"
                 className={`p-3 rounded-md transition-colors ${
