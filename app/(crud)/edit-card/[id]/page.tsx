@@ -29,7 +29,7 @@ export default function EditCardView() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_UR}/api/cards/${id}`)
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/cards/${id}`)
                 card = response.data.message
                 console.log("Fetch successful")
                 setFormData((prevData) => ({
@@ -76,7 +76,7 @@ export default function EditCardView() {
 
         try {
             const response = await axios.put(
-                `${process.env.NEXT_PUBLIC_API_UR}/api/cards/${id}`,
+                `${process.env.NEXT_PUBLIC_API_URL}/api/cards/${id}`,
                 formData
             );
             toast('Card Edited Successfully!')

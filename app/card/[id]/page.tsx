@@ -21,7 +21,7 @@ export default async function CardView(props: {params: Promise<{ id: string }> }
     let card: Card | null = null;
 
     try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_UR}/api/cards/${params.id}`)
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/cards/${params.id}`)
         card = response.data.message
         console.log("Fetch successful")
     } catch (err) {
@@ -115,10 +115,10 @@ export default async function CardView(props: {params: Promise<{ id: string }> }
                                     </div>
                                 </div>
                                 
-                                {/* Action Buttons */}
                                 <div>
                                     <AddToCart cardID={params.id}/>
                                 </div>
+                                
                                 <div className="flex gap-4 mt-8">
                                     <EditButton cardID={params.id} />
                                     <DeleteButton cardID={params.id}/>

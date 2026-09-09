@@ -15,7 +15,7 @@ export default function DeleteCardView() {
         e.preventDefault();
 
         try {
-            const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_UR}/api/cards/${cardID}`);
+            const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/cards/${cardID}`);
             console.log('Card deleted successfully');
             console.log("Response:", response.data.message);
         } catch(error) {

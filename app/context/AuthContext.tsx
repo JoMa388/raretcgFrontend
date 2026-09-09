@@ -12,6 +12,7 @@ import { jwtDecode } from "jwt-decode";
 type DecodedToken = {
   userId?: number;
   email?: string;
+  role?: string;
   exp?: number;
 };
 

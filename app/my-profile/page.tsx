@@ -51,6 +51,9 @@ export default function MyProfile () {
                 <div className="mb-8 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 p-8 shadow-xl">
                     <p className="text-xs font-semibold uppercase tracking-[0.25em] text-blue-100">Account</p>
                     <h1 className="mt-3 text-3xl font-bold text-white">Welcome, {user?.email ?? "Collector"}</h1>
+                    { user?.role === 'admin' && (
+                        <h2 className="mt-2 text-lg font-medium uppercase tracking-[0.2em] text-blue-100">Admin</h2>
+                    )}
                 </div>
 
                 <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg shadow-slate-200/80">

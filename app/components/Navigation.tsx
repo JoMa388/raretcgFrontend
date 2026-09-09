@@ -39,8 +39,8 @@ export default function Navigation() {
     { href: '/', label: 'Home' },
     { href: '/all-cards', label: 'All Cards' },
     
-    // auth dependent links
-    isLoggedIn && { href: '/add-card', label: 'Add Card' },
+    // auth and permission dependent links
+    isLoggedIn && user?.role === 'admin' && { href: '/add-card', label: 'Add Card' },
     !isLoggedIn && { href: '/login', label: 'Login' },
     !isLoggedIn && { href: '/signup', label: 'Sign up' },
     isLoggedIn && { href: '/my-profile', label: 'Account' },
